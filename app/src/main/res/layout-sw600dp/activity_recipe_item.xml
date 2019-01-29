@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    tools:context=".ui.RecipeItemActivity">
+
+    <!-- The static MasterListFragment -->
+    <fragment
+        android:id="@+id/master_list_fragment"
+        android:name="ca.leomoraes.bakingapp.ui.MasterListFragment"
+        android:layout_width="400dp"
+        android:layout_height="match_parent" />
+
+    <!-- A small divider -->
+    <View
+    android:layout_width="1dp"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray" />
+
+    <!-- The static MasterListFragment -->
+    <fragment
+        android:id="@+id/master_detail_fragment"
+        android:name="ca.leomoraes.bakingapp.ui.MasterDetailFragment"
+        android:layout_width="400dp"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

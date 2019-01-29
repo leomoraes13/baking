@@ -71,9 +71,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
      * When data changes, this method updates the list of recipes
      * and notifies the adapter to use the new values on it
      */
-    public void setTasks(List<Recipe> recipes) {
+    public void setRecipes(List<Recipe> recipes) {
         mEntries = recipes;
         notifyDataSetChanged();
+    }
+
+    public Recipe getItemAtPosition(int position){
+        return mEntries.get(position);
+
     }
 
     public interface ItemClickListener {
@@ -93,8 +98,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
         @Override
         public void onClick(View view) {
-            int elementId = mEntries.get(getAdapterPosition()).getId();
-            mItemClickListener.onItemClickListener(elementId);
+            mItemClickListener.onItemClickListener(getAdapterPosition());
         }
     }
 

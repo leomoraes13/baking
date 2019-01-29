@@ -2,6 +2,7 @@ package ca.leomoraes.bakingapp.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -50,19 +51,16 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.I
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
                 Log.d(TAG, "Updating list of recipes from LiveData in ViewModel");
-                mAdapter.setTasks(recipes);
+                mAdapter.setRecipes(recipes);
             }
         });
     }
 
-
     @Override
     public void onItemClickListener(int itemId) {
-        // Launch AddTaskActivity adding the itemId as an extra in the intent
-/*        Intent intent = new Intent(RecipeActivity.this, AddTaskActivity.class);
-        intent.putExtra(AddTaskActivity.EXTRA_TASK_ID, itemId);
-        startActivity(intent);*/
-
-        Toast.makeText(this, "item: " + itemId, Toast.LENGTH_LONG).show();
+        // Launch AddTaskActivity adding the object as an extra in the intent
+        Intent intent = new Intent(RecipeActivity.this, RecipeItemActivity.class);
+        intent.putExtra(RecipeItemActivity.EXTRA_RECIPE, mAdapter.getItemAtPosition(itemId));
+        startActivity(intent);
     }
 }
