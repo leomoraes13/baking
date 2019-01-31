@@ -8,9 +8,8 @@
     tools:context=".ui.RecipeItemActivity">
 
     <!-- The static MasterListFragment -->
-    <fragment
+    <FrameLayout
         android:id="@+id/master_list_fragment"
-        android:name="ca.leomoraes.bakingapp.ui.MasterListFragment"
         android:layout_width="400dp"
         android:layout_height="match_parent" />
 
@@ -21,9 +20,8 @@
     android:background="@android:color/darker_gray" />
 
     <!-- The static MasterListFragment -->
-    <fragment
+    <FrameLayout
         android:id="@+id/master_detail_fragment"
-        android:name="ca.leomoraes.bakingapp.ui.MasterDetailFragment"
         android:layout_width="400dp"
         android:layout_height="match_parent" />
 
