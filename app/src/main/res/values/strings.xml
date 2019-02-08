@@ -2,6 +2,5 @@
     <string name="app_name">BakingApp</string>
     <string name="recipe_url">https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet nunc vitae quam imperdiet eleifend. Nam sed quam finibus, sagittis nulla vel, sodales nisi. Nullam vel nunc a turpis porttitor interdum. Praesent in porta ligula. Donec scelerisque non velit a maximus. Aliquam id commodo sapien. Nam a egestas nulla. Mauris interdum risus vitae dolor iaculis pharetra ac in turpis.</string>
 </resources>

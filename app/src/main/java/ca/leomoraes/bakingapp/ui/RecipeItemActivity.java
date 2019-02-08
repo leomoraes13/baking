@@ -41,15 +41,18 @@ public class RecipeItemActivity extends AppCompatActivity {
 
     private void setupFragments() {
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction()
+/*        fm.beginTransaction()
                 .add(R.id.master_list_fragment, new MasterListFragment())
+                .commit();*/
+        fm.beginTransaction()
+                .add(R.id.master_list_fragment, new MasterDetailFragment())
                 .commit();
 
-        if(mTwoPane){
+/*        if(mTwoPane){
             fm.beginTransaction()
                     .add(R.id.master_detail_fragment, new MasterDetailFragment())
                     .commit();
-        }
+        }*/
     }
 
     private void setupViewModel(Recipe recipe) {
