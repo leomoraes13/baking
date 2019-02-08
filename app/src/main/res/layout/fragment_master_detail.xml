@@ -6,12 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.MasterDetailFragment">
 
-    <ImageView
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/detail_media_player"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="200dp"
-        android:src="@drawable/dessert_generic"
-        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

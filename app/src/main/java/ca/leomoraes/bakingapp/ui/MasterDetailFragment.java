@@ -3,6 +3,7 @@ package ca.leomoraes.bakingapp.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,12 +18,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,13 +46,15 @@ public class MasterDetailFragment extends Fragment {
     private String TAG = "LOG_FRAGMENT_DETAIL";
 
     @BindView(R.id.detail_media_player)
-    ImageView image;
+    SimpleExoPlayerView mPlayerView;
 
     @Nullable @BindView(R.id.detail_step_title)
     TextView title;
 
     @Nullable @BindView(R.id.detail_step_description)
     TextView description;
+
+    private SimpleExoPlayer mExoPlayer;
 
     public MasterDetailFragment() {
         // Required empty public constructor
@@ -88,10 +97,57 @@ public class MasterDetailFragment extends Fragment {
             description.setText( step.getDescription() );
         }
 
-        if(step.getThumbnailURL()!=null && !step.getThumbnailURL().isEmpty())
+        // Initialize the image.
+/*        if(step.getThumbnailURL()!=null && !step.getThumbnailURL().isEmpty())
             Glide
                 .with(getActivity())
                 .load(step.getThumbnailURL())
-                .into(image);
+                .into(image);*/
+
+        // Initialize the player.
+        if(step.getVideoURL()!=null)
+            initializePlayer(Uri.parse(step.getVideoURL()));
+    }
+
+    /**
+     * Initialize ExoPlayer.
+     * @param mediaUri The URI of the sample to play.
+     */
+    private void initializePlayer(Uri mediaUri) {
+        Context context = getContext();
+        if (mExoPlayer == null) {
+            // Create an instance of the ExoPlayer.
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
+            mPlayerView.setPlayer(mExoPlayer);
+            // Prepare the MediaSource.
+            String userAgent = Util.getUserAgent(context, "BakingApp");
+            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
+                    context, userAgent), new DefaultExtractorsFactory(), null, null);
+            mExoPlayer.prepare(mediaSource);
+            mExoPlayer.setPlayWhenReady(true);
+        }
+
+        // mExoPlayer.stop();
+    }
+
+
+    /**
+     * Release ExoPlayer.
+     */
+    private void releasePlayer() {
+        mExoPlayer.stop();
+        mExoPlayer.release();
+        mExoPlayer = null;
+    }
+
+    /**
+     * Release the player when the fragment is destroyed.
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        releasePlayer();
     }
 }
