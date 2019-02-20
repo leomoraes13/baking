@@ -11,6 +11,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -26,7 +28,11 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.I
     private String TAG = "LOG_Main";
 
     @BindView(R.id.recipe_recycler)
-    public RecyclerView mRecycler;
+    RecyclerView mRecycler;
+
+    @BindView(R.id.recipe_progress)
+    ProgressBar progressBar;
+
 
     private RecipeAdapter mAdapter;
 
@@ -53,12 +59,14 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.I
     }
 
     private void setupViewModel() {
+        progressBar.setVisibility(View.VISIBLE);
         RecipeViewModel viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
         viewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
                 Log.d(TAG, "Updating list of recipes from LiveData in ViewModel");
                 mAdapter.setRecipes(recipes);
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
