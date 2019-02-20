@@ -3,10 +3,13 @@ package ca.leomoraes.bakingapp.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,18 +19,26 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ca.leomoraes.bakingapp.R;
+import ca.leomoraes.bakingapp.adaper.StepAdapter;
 import ca.leomoraes.bakingapp.model.Recipe;
 import ca.leomoraes.bakingapp.viewModel.RecipeItemViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MasterListFragment extends Fragment {
+public class MasterListFragment extends Fragment implements StepAdapter.ItemClickListener  {
 
     private String TAG = "LOG_FRAGMENT_LIST";
+    private Context mContext;
 
-    @BindView(R.id.master_list_title)
+    @BindView(R.id.master_list_recycler)
+    public RecyclerView mRecycler;
+
+    @BindView(R.id.list_title)
     TextView title;
+
+    private StepAdapter mAdapter;
+    private RecipeItemViewModel recipeItemViewModel;
 
     public MasterListFragment() {
         // Required empty public constructor
@@ -45,11 +56,21 @@ public class MasterListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mContext = getContext();
+        setupRecycler();
         setupViewModel();
     }
 
+    private void setupRecycler() {
+        mRecycler.setLayoutManager(new LinearLayoutManager(mContext));
+        mAdapter = new StepAdapter(mContext, this);
+        mRecycler.setAdapter(mAdapter);
+    }
+
     private void setupViewModel() {
-        ViewModelProviders.of(getActivity()).get(RecipeItemViewModel.class).getRecipe().observe(getActivity(), new Observer<Recipe>() {
+        recipeItemViewModel = ViewModelProviders.of(getActivity()).get(RecipeItemViewModel.class);
+
+        recipeItemViewModel.getRecipe().observe(getActivity(), new Observer<Recipe>() {
             @Override
             public void onChanged(@Nullable Recipe recipe) {
                 Log.d(TAG, "Updating recipe object from LiveData in ViewModel");
@@ -59,7 +80,15 @@ public class MasterListFragment extends Fragment {
     }
 
     private void updateLayout(Recipe recipe){
-        title.setText( "List: " + recipe.getName() + " / " + recipe.getIngredients().get(0).getIngredient() );
+        mAdapter.setSteps(recipe.getSteps());
+        title.setText(recipe.getName());
     }
 
+    @Override
+    public void onItemClickListener(int itemId) {
+        recipeItemViewModel.setStepId(itemId);
+        if(!recipeItemViewModel.getTwoPanels().getValue()){
+            ((RecipeItemActivity)getActivity()).goToDetails();
+        }
+    }
 }

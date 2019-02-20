@@ -15,17 +15,35 @@ public class RecipeItemViewModel extends AndroidViewModel {
 
     // List of recipe
     private MutableLiveData<Recipe> recipe;
+    private MutableLiveData<Boolean> twoPanels;
+    private MutableLiveData<Integer> stepId;
 
-    public RecipeItemViewModel(@NonNull Application application) {
+    public RecipeItemViewModel(@NonNull Application application, Recipe recipe, boolean twoPanels) {
         super(application);
-    }
-
-    public void init(Recipe recipe){
         this.recipe = new MutableLiveData<>();
         this.recipe.setValue( recipe );
+        this.twoPanels = new MutableLiveData<>();
+        this.twoPanels.setValue( twoPanels );
     }
 
     public LiveData<Recipe> getRecipe() {
         return recipe;
     }
+
+    public LiveData<Boolean> getTwoPanels() {
+        return twoPanels;
+    }
+
+    public LiveData<Integer> getStepId() {
+        if(stepId==null)
+            this.stepId = new MutableLiveData<>();
+        return stepId;
+    }
+
+    public void setStepId(Integer stepId){
+        if(this.stepId==null)
+            this.stepId = new MutableLiveData<>();
+        this.stepId.postValue(stepId);
+    }
+
 }

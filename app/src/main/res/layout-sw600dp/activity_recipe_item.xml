@@ -10,8 +10,9 @@
     <!-- The static MasterListFragment -->
     <FrameLayout
         android:id="@+id/master_list_fragment"
-        android:layout_width="400dp"
-        android:layout_height="match_parent" />
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 
     <!-- A small divider -->
     <View
@@ -22,7 +23,8 @@
     <!-- The static MasterListFragment -->
     <FrameLayout
         android:id="@+id/master_detail_fragment"
-        android:layout_width="400dp"
-        android:layout_height="match_parent" />
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"/>
 
 </LinearLayout>

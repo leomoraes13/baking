@@ -1,15 +1,18 @@
 package ca.leomoraes.bakingapp.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import ca.leomoraes.bakingapp.R;
 import ca.leomoraes.bakingapp.model.Recipe;
 import ca.leomoraes.bakingapp.viewModel.RecipeItemViewModel;
+import ca.leomoraes.bakingapp.viewModel.ViewModelFactory;
 
 public class RecipeItemActivity extends AppCompatActivity {
 
@@ -20,12 +23,26 @@ public class RecipeItemActivity extends AppCompatActivity {
     // A single-pane display refers to phone screens, and two-pane to larger tablet screens
     private boolean mTwoPane;
     private RecipeItemViewModel viewModel;
+    private FragmentManager fm;
+    private boolean isHome=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
+        if(savedInstanceState!=null)
+            isHome = savedInstanceState.getBoolean(getString(R.string.boolean_param));
+
         setContentView(R.layout.activity_recipe_item);
         ButterKnife.bind(this);
+
+        mTwoPane = findViewById(R.id.master_detail_fragment)!=null;
 
         Bundle bundle = this.getIntent().getExtras();
         Recipe recipe = null;
@@ -33,30 +50,62 @@ public class RecipeItemActivity extends AppCompatActivity {
             recipe = bundle.getParcelable(EXTRA_RECIPE);
         }
 
-        mTwoPane = findViewById(R.id.master_detail_fragment)!=null;
-
-        setupViewModel(recipe);
+        setupViewModel(recipe, mTwoPane);
         setupFragments();
     }
 
     private void setupFragments() {
-        FragmentManager fm = getSupportFragmentManager();
-/*        fm.beginTransaction()
-                .add(R.id.master_list_fragment, new MasterListFragment())
-                .commit();*/
-        fm.beginTransaction()
-                .add(R.id.master_list_fragment, new MasterDetailFragment())
-                .commit();
+        fm = getSupportFragmentManager();
 
-/*        if(mTwoPane){
+        if(mTwoPane){
             fm.beginTransaction()
-                    .add(R.id.master_detail_fragment, new MasterDetailFragment())
+                    .replace(R.id.master_list_fragment, new MasterListFragment())
                     .commit();
-        }*/
+
+            fm.beginTransaction()
+                    .replace(R.id.master_detail_fragment, new MasterDetailFragment())
+                    .commit();
+        }else{
+            if(isHome) {
+                fm.beginTransaction()
+                        .replace(R.id.master_list_fragment, new MasterListFragment())
+                        .commit();
+            }else{
+                fm.beginTransaction()
+                        .replace(R.id.master_list_fragment, new MasterDetailFragment())
+                        .commit();
+            }
+        }
     }
 
-    private void setupViewModel(Recipe recipe) {
-        viewModel = ViewModelProviders.of(this).get(RecipeItemViewModel.class);
-        viewModel.init( recipe );
+    private void setupViewModel(Recipe recipe, boolean twoPanel) {
+        viewModel = ViewModelProviders.of(this, new ViewModelFactory(this.getApplication(), recipe, twoPanel)).get(RecipeItemViewModel.class);
+    }
+
+    public void goToDetails(){
+        isHome = false;
+        fm.beginTransaction()
+            .replace(R.id.master_list_fragment, new MasterDetailFragment())
+            .commit();
+    }
+    public void goToList(){
+        isHome = true;
+        fm.beginTransaction()
+                .replace(R.id.master_list_fragment, new MasterListFragment())
+                .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!isHome)
+            goToList();
+        else
+            super.onBackPressed();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(getString(R.string.boolean_param), isHome);
     }
 }

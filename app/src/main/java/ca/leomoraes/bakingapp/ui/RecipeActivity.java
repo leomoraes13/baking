@@ -3,13 +3,14 @@ package ca.leomoraes.bakingapp.ui;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -40,7 +41,13 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.I
     }
 
     private void setupRecycler() {
-        mRecycler.setLayoutManager(new LinearLayoutManager(this));
+        GridLayoutManager gridLayoutManager;
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+            gridLayoutManager = new GridLayoutManager(this, 2);
+        else
+            gridLayoutManager = new GridLayoutManager(this, 1);
+
+        mRecycler.setLayoutManager(gridLayoutManager);
         mAdapter = new RecipeAdapter(this, this);
         mRecycler.setAdapter(mAdapter);
     }
