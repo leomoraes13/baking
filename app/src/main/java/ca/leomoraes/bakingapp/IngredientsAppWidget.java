@@ -1,14 +1,19 @@
 package ca.leomoraes.bakingapp;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.leomoraes.bakingapp.model.Ingredient;
+import ca.leomoraes.bakingapp.service.IngredientsAppService;
+import ca.leomoraes.bakingapp.ui.IngredientsActivity;
 
 /**
  * Implementation of App Widget functionality.
@@ -18,17 +23,22 @@ public class IngredientsAppWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-
-        List<Ingredient> list = new ArrayList<>();
-        list.add(new Ingredient(2.0, "CUP", "double gloucester cheese"));
-        list.add(new Ingredient(1.0, "UNITS", "bread crumbs"));
-        list.add(new Ingredient(1.0, "TBSPN", "confectioners sugar"));
-        list.add(new Ingredient(1.5, "CUP", "chocolate pudding"));
-
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_app_widget);
-        views.setTextViewText(R.id.widget_text, widgetText);
+
+        Intent intent = new Intent(context, IngredientsAppService.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        views.setRemoteAdapter(appWidgetId, R.id.widget_list, intent);
+
+
+/*        Intent launchMain = new Intent(context, IngredientsActivity.class);
+        PendingIntent pendingMainIntent = PendingIntent.getActivity(context, 0, launchMain, 0);
+        views.setOnClickPendingIntent(R.id.widget_list, pendingMainIntent);
+
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_item);
+        appWidgetManager.updateAppWidget(appWidgetId, views);*/
+
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
