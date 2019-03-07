@@ -4,59 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.MasterListFragment">
+    tools:context=".ui.MasterListFragment"
+    android:background="@color/background">
 
+    <View
+        android:id="@+id/header"
+        style="@style/HeaderView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
     <TextView
         android:id="@+id/list_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        style="@style/HeaderTitle"
+        tools:text="@string/app_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/header"/>
+
+    <ImageView
+        android:id="@+id/list_ingredients_button"
+        android:layout_width="@dimen/default_icon_size"
+        android:layout_height="@dimen/default_icon_size"
+        android:src="@drawable/ic_info"
         android:layout_margin="@dimen/default_margin"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:paddingBottom="@dimen/default_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintEnd_toStartOf="@id/list_widget_button"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/list_ingredients"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/list_title"
-        app:cardCornerRadius="8dp"
-        android:layout_margin="8dp">
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent">
-
-            <TextView
-                android:text="@string/ingredients"
-                android:id="@+id/item_ingredients_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:padding="@dimen/default_margin"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </android.support.constraint.ConstraintLayout>
-
-    </android.support.v7.widget.CardView>
+    <ImageView
+        android:id="@+id/list_widget_button"
+        android:layout_width="@dimen/default_icon_size"
+        android:layout_height="@dimen/default_icon_size"
+        android:src="@drawable/ic_widgets_white"
+        android:layout_margin="@dimen/default_margin"
+        app:layout_constraintEnd_toEndOf="@+id/header"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/master_list_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingTop="@dimen/default_margin"
-        app:layout_constraintTop_toBottomOf="@id/list_ingredients"
+        app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

@@ -4,29 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.IngredientsActivity">
+    tools:context=".ui.IngredientsActivity"
+    android:background="@color/background">
+
+    <View
+        android:id="@+id/header"
+        style="@style/HeaderView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/ingredients_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin"
+        style="@style/HeaderTitle"
         tools:text="@string/app_name"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@id/header"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ingredients_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="@dimen/default_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ingredients_title" />
+        app:layout_constraintTop_toBottomOf="@id/header" />
 
 </android.support.constraint.ConstraintLayout>

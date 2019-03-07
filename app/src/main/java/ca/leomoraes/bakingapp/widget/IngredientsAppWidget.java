@@ -1,44 +1,45 @@
-package ca.leomoraes.bakingapp;
+package ca.leomoraes.bakingapp.widget;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ca.leomoraes.bakingapp.model.Ingredient;
-import ca.leomoraes.bakingapp.service.IngredientsAppService;
+import ca.leomoraes.bakingapp.R;
+import ca.leomoraes.bakingapp.model.Recipe;
 import ca.leomoraes.bakingapp.ui.IngredientsActivity;
+import ca.leomoraes.bakingapp.ui.RecipeActivity;
+import ca.leomoraes.bakingapp.ui.RecipeItemActivity;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class IngredientsAppWidget extends AppWidgetProvider {
 
+    public static Recipe mRecipeSelected;
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-
-        // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_app_widget);
 
-        Intent intent = new Intent(context, IngredientsAppService.class);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-        views.setRemoteAdapter(appWidgetId, R.id.widget_list, intent);
+        views.setTextViewText(R.id.widget_title, mRecipeSelected.getName());
+
+        Intent intent = new Intent(context, IngredientsActivity.class);
+        intent.putExtra(RecipeItemActivity.EXTRA_RECIPE, mRecipeSelected);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context,
+                5, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        views.setOnClickPendingIntent(R.id.widget_layout_all, pendingIntent);
 
 
-/*        Intent launchMain = new Intent(context, IngredientsActivity.class);
-        PendingIntent pendingMainIntent = PendingIntent.getActivity(context, 0, launchMain, 0);
-        views.setOnClickPendingIntent(R.id.widget_list, pendingMainIntent);
-
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_item);
-        appWidgetManager.updateAppWidget(appWidgetId, views);*/
-
+        // Set up the collection
+        setRemoteAdapter(context, views);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -50,16 +51,21 @@ public class IngredientsAppWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
     }
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private static void setRemoteAdapter(Context context, @NonNull final RemoteViews views) {
+        views.setRemoteAdapter(R.id.widget_list,
+                new Intent(context, IngredientsAppService.class));
     }
 }
 

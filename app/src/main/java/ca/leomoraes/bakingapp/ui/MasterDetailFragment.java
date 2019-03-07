@@ -1,6 +1,7 @@
 package ca.leomoraes.bakingapp.ui;
 
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -100,6 +101,9 @@ public class MasterDetailFragment extends Fragment {
 
         if(title!=null)
             title.setText( step.getShortDescription() );
+        else
+            hideSystemUi();
+
         if(description!=null)
             description.setText( step.getDescription() );
 
@@ -113,6 +117,16 @@ public class MasterDetailFragment extends Fragment {
             mPlayerView.setVisibility(View.INVISIBLE);
             mImageView.setVisibility(View.VISIBLE);
         }
+    }
+
+    @SuppressLint("InlinedApi")
+    private void hideSystemUi() {
+        mPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
     /**

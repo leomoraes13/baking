@@ -24,6 +24,7 @@ import butterknife.OnClick;
 import ca.leomoraes.bakingapp.R;
 import ca.leomoraes.bakingapp.adaper.StepAdapter;
 import ca.leomoraes.bakingapp.model.Recipe;
+import ca.leomoraes.bakingapp.util.SharedPreferencesUtil;
 import ca.leomoraes.bakingapp.viewModel.RecipeItemViewModel;
 
 /**
@@ -95,10 +96,16 @@ public class MasterListFragment extends Fragment implements StepAdapter.ItemClic
         }
     }
 
-    @OnClick(R.id.list_ingredients)
+    @OnClick(R.id.list_ingredients_button)
     public void openIngredients(){
         Intent intent = new Intent(mContext, IngredientsActivity.class);
         intent.putExtra(RecipeItemActivity.EXTRA_RECIPE, recipeItemViewModel.getRecipe().getValue());
         startActivity(intent);
+    }
+
+    @OnClick(R.id.list_widget_button)
+    public void setWidgetRecipe(){
+        SharedPreferencesUtil.setRecipeName(mContext, recipeItemViewModel.getRecipe().getValue());
+        Toast.makeText(mContext, "Widget's recipe changed.", Toast.LENGTH_SHORT).show();
     }
 }

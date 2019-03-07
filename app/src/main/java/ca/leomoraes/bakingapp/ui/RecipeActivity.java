@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +20,7 @@ import butterknife.ButterKnife;
 import ca.leomoraes.bakingapp.R;
 import ca.leomoraes.bakingapp.adaper.RecipeAdapter;
 import ca.leomoraes.bakingapp.model.Recipe;
+import ca.leomoraes.bakingapp.util.SharedPreferencesUtil;
 import ca.leomoraes.bakingapp.viewModel.RecipeViewModel;
 
 public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.ItemClickListener {
@@ -67,6 +67,9 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.I
                 Log.d(TAG, "Updating list of recipes from LiveData in ViewModel");
                 mAdapter.setRecipes(recipes);
                 progressBar.setVisibility(View.GONE);
+
+                if(recipes!=null && !recipes.isEmpty() && SharedPreferencesUtil.isNull())
+                    SharedPreferencesUtil.setRecipeName(RecipeActivity.this, recipes.get(0));
             }
         });
     }

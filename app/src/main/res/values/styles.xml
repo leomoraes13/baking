@@ -21,4 +21,18 @@
         <item name="android:textSize">@dimen/text_size_body</item>
     </style>
 
+    <style name="HeaderTitle">
+        <item name="android:textSize">@dimen/text_size_header_title</item>
+        <item name="android:layout_margin">@dimen/default_margin</item>
+        <item name="android:paddingBottom">@dimen/default_margin</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/textWhite</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+    <style name="HeaderView">
+        <item name="android:layout_height">150dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:background">@color/colorPrimaryLight</item>
+    </style>
+
 </resources>
