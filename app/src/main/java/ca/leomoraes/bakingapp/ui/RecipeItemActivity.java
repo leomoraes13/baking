@@ -71,9 +71,9 @@ public class RecipeItemActivity extends AppCompatActivity {
                         .replace(R.id.master_list_fragment, new MasterListFragment())
                         .commit();
             }else{
-                fm.beginTransaction()
+/*                fm.beginTransaction()
                         .replace(R.id.master_list_fragment, new MasterDetailFragment())
-                        .commit();
+                        .commit();*/
             }
         }
     }

@@ -8,4 +8,8 @@
     <string name="ingredients">Ingredients</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="img_no_video">No Video</string>
+    <string name="img_ingredientes">Ingredientes</string>
+    <string name="img_widget">widget</string>
+    <string name="img_recipe_image">recipe image</string>
 </resources>

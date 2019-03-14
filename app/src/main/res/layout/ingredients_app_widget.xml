@@ -20,7 +20,8 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_widgets"/>
+                android:src="@drawable/ic_widgets"
+                android:contentDescription="@string/img_widget" />
             <TextView
                 android:id="@+id/widget_title"
                 android:layout_width="match_parent"

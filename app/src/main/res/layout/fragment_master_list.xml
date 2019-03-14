@@ -30,7 +30,8 @@
         android:src="@drawable/ic_info"
         android:layout_margin="@dimen/default_margin"
         app:layout_constraintEnd_toStartOf="@id/list_widget_button"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/img_ingredientes" />
 
     <ImageView
         android:id="@+id/list_widget_button"
@@ -39,7 +40,8 @@
         android:src="@drawable/ic_widgets_white"
         android:layout_margin="@dimen/default_margin"
         app:layout_constraintEnd_toEndOf="@+id/header"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/img_widget" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/master_list_recycler"

@@ -16,9 +16,6 @@ import ca.leomoraes.bakingapp.ui.IngredientsActivity;
 import ca.leomoraes.bakingapp.ui.RecipeActivity;
 import ca.leomoraes.bakingapp.ui.RecipeItemActivity;
 
-/**
- * Implementation of App Widget functionality.
- */
 public class IngredientsAppWidget extends AppWidgetProvider {
 
     public static Recipe mRecipeSelected;
@@ -36,18 +33,12 @@ public class IngredientsAppWidget extends AppWidgetProvider {
                 5, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         views.setOnClickPendingIntent(R.id.widget_layout_all, pendingIntent);
-
-
-        // Set up the collection
         setRemoteAdapter(context, views);
-
-        // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }

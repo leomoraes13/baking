@@ -10,10 +10,6 @@ import java.util.List;
 
 import ca.leomoraes.bakingapp.model.Ingredient;
 
-/**
- * WidgetDataProvider acts as the adapter for the collection view widget,
- * providing RemoteViews to the widget in the getViewAt method.
- */
 public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
 
     private static final String TAG = "WidgetDataProvider";

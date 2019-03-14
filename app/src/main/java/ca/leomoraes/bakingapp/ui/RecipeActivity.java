@@ -1,6 +1,7 @@
 package ca.leomoraes.bakingapp.ui;
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -33,7 +34,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.I
     @BindView(R.id.recipe_progress)
     ProgressBar progressBar;
 
-
+    private RecipeViewModel viewModel;
     private RecipeAdapter mAdapter;
 
     @Override
@@ -60,7 +61,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.I
 
     private void setupViewModel() {
         progressBar.setVisibility(View.VISIBLE);
-        RecipeViewModel viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
         viewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
@@ -80,5 +81,9 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.I
         Intent intent = new Intent(RecipeActivity.this, RecipeItemActivity.class);
         intent.putExtra(RecipeItemActivity.EXTRA_RECIPE, mAdapter.getItemAtPosition(itemId));
         startActivity(intent);
+    }
+
+    public ViewModel getViewModel(){
+        return this.viewModel;
     }
 }

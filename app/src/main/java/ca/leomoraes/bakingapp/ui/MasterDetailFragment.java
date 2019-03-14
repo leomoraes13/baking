@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -58,6 +60,10 @@ public class MasterDetailFragment extends Fragment {
     private SimpleExoPlayer mExoPlayer;
     private RecipeItemViewModel recipeItemViewModel;
     private Context mContext;
+    private final String VIDEO_POSITION = "video_position";
+    private final String VIDEO_PLAYING = "video_playing";
+    private long mVideoPosition;
+    private boolean mVideoIsPlaying;
 
     public MasterDetailFragment() {
         // Required empty public constructor
@@ -70,7 +76,27 @@ public class MasterDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_master_detail, container, false);
         ButterKnife.bind(this, view);
+
+        if(savedInstanceState!=null){
+            mVideoPosition = savedInstanceState.getLong(VIDEO_POSITION, C.TIME_UNSET);
+            mVideoIsPlaying = savedInstanceState.getBoolean(VIDEO_PLAYING, false);
+        }else{
+            mVideoPosition = C.TIME_UNSET;
+            mVideoIsPlaying = false;
+        }
+
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        long position = mExoPlayer.getCurrentPosition();
+        boolean playing = mExoPlayer.getPlayWhenReady();
+
+        outState.putLong(VIDEO_POSITION, position);
+        outState.putBoolean(VIDEO_PLAYING, playing);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -116,6 +142,12 @@ public class MasterDetailFragment extends Fragment {
             releasePlayer();
             mPlayerView.setVisibility(View.INVISIBLE);
             mImageView.setVisibility(View.VISIBLE);
+            if(step.getThumbnailURL()!=null && !step.getThumbnailURL().isEmpty()){
+                Glide
+                    .with(mContext)
+                    .load(step.getThumbnailURL())
+                    .into(mImageView);
+            }
         }
     }
 
@@ -147,9 +179,9 @@ public class MasterDetailFragment extends Fragment {
         MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                 mContext, userAgent), new DefaultExtractorsFactory(), null, null);
         mExoPlayer.prepare(mediaSource);
-        mExoPlayer.setPlayWhenReady(false);
-
-        // mExoPlayer.stop();
+        if (mVideoPosition != C.TIME_UNSET)
+            mExoPlayer.seekTo(mVideoPosition);
+        mExoPlayer.setPlayWhenReady(mVideoIsPlaying);
     }
 
 
@@ -171,5 +203,21 @@ public class MasterDetailFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         releasePlayer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 }
